@@ -56,6 +56,8 @@
 # [*port*] port number used by each tincd
 #        (see the tinc.conf manual page for more information)
 #
+# [*tcp*] Whether to use TCP instead of UDP
+#
 # == Example
 #
 #  include l2mesh::params
@@ -131,7 +133,7 @@
 # [the puppetmaster crashes] the */var/lib/puppet* directory will be
 #   lost and all the keypairs with it. If the puppetmaster is reconstructed
 #   but the content of */var/lib/puppet* cannot be recovered, the keys
-#   for all hosts will be recreated. 
+#   for all hosts will be recreated.
 #
 # [impersonating a node] the keypairs are distributed from the puppetmaster
 #   to the nodes and a node that would succeed in fooling the puppetmaster
@@ -167,6 +169,10 @@
 # == Authors
 #
 # Loic Dachary <loic@dachary.org>
+# - Original Author
+#
+# Mike Green <myatus@gmail.com>
+# - Added TCPOnly option
 #
 # == Copyright
 #
@@ -175,7 +181,8 @@
 
 define l2mesh(
   $ip,
-  $port,            
+  $port,
+  $tcp_only = 'no',
 ) {
 
   include l2mesh::params
@@ -191,7 +198,7 @@ define l2mesh(
 
   $start = "start_${name}"
   $running = "tincd --net=${name} --kill=USR1"
-  
+
   exec { $start:
     command	=> "tincd --net=${name} && ${running}",
     onlyif	=> "! ${running}",
@@ -283,6 +290,7 @@ define l2mesh(
     content     => "Address = $ip
 Port = $port
 Compression = 0
+TCPOnly = ${tcp_only}
 
 ${public_key}
 ",

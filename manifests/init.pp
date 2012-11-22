@@ -280,7 +280,7 @@ define l2mesh(
   }
 
   # Add host files
-  @file { $host:
+  @@file { $host:
     owner   => root,
     group   => root,
     mode    => '0444',
@@ -298,7 +298,7 @@ ${public_key}
 
   }
 
-  File <| tag == $tag |>
+  File <<| tag == $tag |>>
 
   # Build tinc.conf file, adding hosts except localhost
   concat { $conf:
@@ -319,11 +319,11 @@ Mode = switch
 ",
   }
 
-  @concat::fragment { "${tag_conf}_${fqdn}":
+  @@concat::fragment { "${tag_conf}_${fqdn}":
     target  => $conf,
     tag     => "${tag_conf}_${fqdn}",
     content => "ConnectTO = ${fqdn}\n",
   }
 
-  Concat::Fragment <| tag != "${tag_conf}_${fqdn}" |>
+  Concat::Fragment <<| tag != "${tag_conf}_${fqdn}" |>>
 }

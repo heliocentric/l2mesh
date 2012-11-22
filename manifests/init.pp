@@ -203,6 +203,7 @@ define l2mesh(
     command	=> "tincd --net=${name} && ${running}",
     onlyif	=> "! ${running}",
     provider	=> 'shell',
+    require     => Package[$package],
   }
 
   $reload = "reload_${name}"
@@ -211,14 +212,15 @@ define l2mesh(
     command	=> "tincd --net=${name} --kill=HUP",
     provider	=> 'shell',
     refreshonly	=> true,
+    require     => Package[$package],
   }
 
   $boots = '/etc/tinc/nets.boot'
 
   if ! defined(Concat[$boots]) {
     concat { $boots:
-      owner	=> root,
-      group	=> 0,
+      owner => root,
+      group => 0,
       mode	=> '0400';
     }
   }
@@ -236,6 +238,7 @@ define l2mesh(
       owner       => root,
       group       => root,
       mode        => '0755',
+      require     => Package[$package],
     }
   }
 

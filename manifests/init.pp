@@ -290,17 +290,17 @@ define l2mesh(
     require     => File[$hosts],
     notify	=> Exec[$reload],
     before      => Exec[$start],
-    content     => "Address = $ip
-Port = $port
+    content     => "Address = ${ip}
+Port = ${port}
 Compression = 0
 TCPOnly = ${tcp_only}
 
 ${public_key}
 ",
-    tag         => $tag,
+    tag         => "${tag}",
   }
 
-  File <<| tag == $tag |>>
+  File <<| tag == "${tag}" |>>
 
   $conf = "${root}/tinc.conf"
 

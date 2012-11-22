@@ -172,7 +172,7 @@
 # - Original Author
 #
 # Mike Green <myatus@gmail.com>
-# - Added TCPOnly option
+# - Added TCPOnly option, general cleanup
 #
 # == Copyright
 #
@@ -186,9 +186,8 @@ define l2mesh(
 ) {
 
   include l2mesh::params
-  include concat::setup
 
-  $package = $::l2mesh::params::tinc_package_name
+  $package = $l2mesh::params::tinc_package_name
 
   if ! defined(Package[$package]) {
     package { $package:
@@ -196,26 +195,40 @@ define l2mesh(
     }
   }
 
-  $start = "start_${name}"
-  $running = "tincd --net=${name} --kill=USR1"
+  $start    = "start_${name}"
+  $reload   = "reload_${name}"
+
+  $running  = "tincd --net=${name} --kill=USR1"
+
+  $boots    = '/etc/tinc/nets.boot'
+  $root     = "/etc/tinc/${name}"
+  $hosts    = "${root}/hosts"
+  $conf     = "${root}/tinc.conf"
+
+  $tag      = "tinc_${name}"
+  $tag_conf = "${tag}_connect"
+
+  $fqdn = regsubst($::fqdn, '[._-]+', '', 'G')
+  $host = "${hosts}/${fqdn}"
+
+  $private     = "${root}/rsa_key.priv"
+  $public      = "${root}/rsa_key.pub"
+  $keys        = tinc_keygen("${l2mesh::params::keys_directory}/${name}/${fqdn}")
+  $private_key = $keys[0]
+  $public_key  = $keys[1]
 
   exec { $start:
-    command	=> "tincd --net=${name} && ${running}",
-    onlyif	=> "! ${running}",
-    provider	=> 'shell',
-    require     => Package[$package],
+    command	 => "tincd --net=${name} && ${running}",
+    onlyif	 => "! ${running}",
+    provider => 'shell',
+    require  => File[$conf]
   }
-
-  $reload = "reload_${name}"
 
   exec { $reload:
     command	=> "tincd --net=${name} --kill=HUP",
     provider	=> 'shell',
     refreshonly	=> true,
-    require     => Package[$package],
   }
-
-  $boots = '/etc/tinc/nets.boot'
 
   if ! defined(Concat[$boots]) {
     concat { $boots:
@@ -230,19 +243,15 @@ define l2mesh(
     content	=> "${name}\n",
   }
 
-  $root = "/etc/tinc/${name}"
-
   if ! defined(File[$root]) {
     file { $root:
-      ensure      => 'directory',
-      owner       => root,
-      group       => root,
-      mode        => '0755',
-      require     => Package[$package],
+      ensure  => 'directory',
+      owner   => root,
+      group   => root,
+      mode    => '0755',
+      require => Package[$package],
     }
   }
-
-  $hosts = "${root}/hosts"
 
   file { $hosts:
     ensure      => 'directory',
@@ -252,44 +261,33 @@ define l2mesh(
     require	=> File[$root],
   }
 
-  $fqdn = regsubst($::fqdn, '[._-]+', '', 'G')
-  $host = "${hosts}/${fqdn}"
-
-  $private = "${root}/rsa_key.priv"
-  $public = "${root}/rsa_key.pub"
-
-  $keys = tinc_keygen("${::l2mesh::params::keys_directory}/${name}/${fqdn}")
-
-  $private_key = $keys[0]
-  $public_key = $keys[1]
-
   file { $private:
-    owner       => root,
-    group       => root,
-    mode        => '0400',
-    content     => $private_key,
+    owner   => root,
+    group   => root,
+    mode    => '0400',
+    content => $private_key,
     notify	=> Exec[$reload],
-    before      => Exec[$start],
+    before  => Exec[$start],
   }
 
   file { $public:
-    owner       => root,
-    group       => root,
-    mode        => '0444',
-    content     => $public_key,
+    owner   => root,
+    group   => root,
+    mode    => '0444',
+    content => $public_key,
     notify	=> Exec[$reload],
-    before      => Exec[$start],
+    before  => Exec[$start],
   }
 
-  $tag = "tinc_${name}"
-
-  @@file { $host:
-    owner       => root,
-    group       => root,
-    mode        => '0444',
-    require     => File[$hosts],
+  # Add host files
+  @file { $host:
+    owner   => root,
+    group   => root,
+    mode    => '0444',
+    require => File[$hosts],
     notify	=> Exec[$reload],
-    before      => Exec[$start],
+    before  => Exec[$start],
+    tag     => $tag,
     content     => "Address = ${ip}
 Port = ${port}
 Compression = 0
@@ -297,25 +295,23 @@ TCPOnly = ${tcp_only}
 
 ${public_key}
 ",
-    tag         => "${tag}",
+
   }
 
-  File <<| tag == "${tag}" |>>
+  File <| tag == $tag |>
 
-  $conf = "${root}/tinc.conf"
-
+  # Build tinc.conf file, adding hosts except localhost
   concat { $conf:
-    owner       => root,
-    group       => root,
-    mode        => 444,
-    require     => File[$root],
+    owner   => root,
+    group   => root,
+    mode    => 444,
+    require => File[$root],
     notify	=> Exec[$reload],
   }
 
   concat::fragment { "${conf}_head":
-    target      => $conf,
-    content     => "
-Name = ${fqdn}
+    target  => $conf,
+    content => "Name = ${fqdn}
 AddressFamily = ipv4
 Device = /dev/net/tun
 Mode = switch
@@ -323,13 +319,11 @@ Mode = switch
 ",
   }
 
-  $tag_conf = "${tag}_connect"
-
-  @@concat::fragment { "${tag_conf}_${fqdn}":
-    target      => $conf,
-    tag         => "${tag_conf}_${fqdn}",
-    content     => "ConnectTO = ${fqdn}\n",
+  @concat::fragment { "${tag_conf}_${fqdn}":
+    target  => $conf,
+    tag     => "${tag_conf}_${fqdn}",
+    content => "ConnectTO = ${fqdn}\n",
   }
 
-  Concat::Fragment <<| tag != "${tag_conf}_${fqdn}" |>>
+  Concat::Fragment <| tag != "${tag_conf}_${fqdn}" |>
 }

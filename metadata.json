@@ -1,0 +1,14 @@
+{
+  "name": "heliocentric-l2mesh",
+  "version": "0.1.0",
+  "author": "heliocentric",
+  "summary": "Module to implement a layer 2 mesh vpn with Tinc",
+  "license": "AGPL",
+  "source": "https://github.com/heliocentric/l2mesh",
+  "project_page": "]",
+  "issues_url": "https://github.com/heliocentric/l2mesh/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ]
+}
+

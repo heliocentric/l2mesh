@@ -24,7 +24,7 @@ Puppet::Parser::Functions::newfunction(:tinc_keygen, :type => :rvalue, :doc =>
   private_key_path = File.join(dir, "rsa_key.priv")
   public_key_path = File.join(dir, "rsa_key.pub")
   if ! File.exists?(private_key_path) || ! File.exists?(public_key_path)
-    output = Puppet::Util.execute(['/usr/sbin/tincd', '--config', dir, '--generate-keys'])
+	output = Puppet::Util::Execution.execute(['/usr/sbin/tincd', '--config', dir, '--generate-keys'])
     raise Puppet::ParseError, "/usr/sbin/tincd --config #{dir} --generate-keys output does not match the 'Generating .* bits keys' regular expression. #{output}" unless output =~ /Generating .* bits keys/
   end
   [ File.read(private_key_path), File.read(public_key_path) ]

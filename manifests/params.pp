@@ -32,4 +32,7 @@ operatingsystem: ${::operatingsystem},
 module ${module_name} only support osfamily RedHat and Debian")
     }
   }
+  file { "/var/lib/puppet":
+    ensure => "directory",
+  }
 }

@@ -1,5 +1,5 @@
 # l2mesh
-
+[![Build Status](https://travis-ci.org/heliocentric/l2mesh.svg?branch=master)](https://travis-ci.org/heliocentric/l2mesh)
 #### Table of Contents
 
 1. [Overview](#overview)

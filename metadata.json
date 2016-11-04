@@ -8,6 +8,24 @@
   "homepage_url": "https://github.com/heliocentric/l2mesh",
   "project_page": "https://github.com/heliocentric/l2mesh",
   "issues_url": "https://github.com/heliocentric/l2mesh/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS"
+    },
+    {
+      "operatingsystem": "RedHat"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "2015.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "4.x"
+    }
+  ],
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
   ]

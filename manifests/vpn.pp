@@ -219,8 +219,8 @@ define l2mesh::vpn (
 
   if ! defined(Concat[$boots]) {
     concat { $boots:
-      owner => "root",
-      group => "0",
+      owner => 'root',
+      group => '0',
       mode  => '0400',
     }
   }
@@ -233,8 +233,8 @@ define l2mesh::vpn (
   if ! defined(File[$root]) {
     file { $root:
       ensure  => 'directory',
-      owner   => "root",
-      group   => "root",
+      owner   => 'root',
+      group   => 'root',
       mode    => '0755',
       require => Package[$package],
     }
@@ -242,15 +242,15 @@ define l2mesh::vpn (
 
   file { $hosts:
     ensure  => 'directory',
-    owner   => "root",
-    group   => "root",
+    owner   => 'root',
+    group   => 'root',
     mode    => '0755',
     require => File[$root],
   }
 
   file { $private:
-    owner   => "root",
-    group   => "root",
+    owner   => 'root',
+    group   => 'root',
     mode    => '0400',
     content => $private_key,
     notify  => Exec[$reload],
@@ -258,8 +258,8 @@ define l2mesh::vpn (
   }
 
   file { $public:
-    owner   => "root",
-    group   => "root",
+    owner   => 'root',
+    group   => 'root',
     mode    => '0444',
     content => $public_key,
     notify  => Exec[$reload],
@@ -269,9 +269,9 @@ define l2mesh::vpn (
 
   # Build tinc.conf file, adding hosts except localhost
   concat { $conf:
-    owner   => "root",
-    group   => "root",
-    mode    => "0444",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0444',
     require => File[$root],
     notify  => Exec[$reload],
   }
@@ -302,13 +302,13 @@ define l2mesh::vpn (
   }
 
   file { "/etc/init.d/${service}":
-    content => template("l2mesh/initscript.erb"),
-    owner   => "root",
-    group   => "wheel",
-    mode    => "0755",
+    content => template('l2mesh/initscript.erb'),
+    owner   => 'root',
+    group   => 'wheel',
+    mode    => '0755',
   }
   service { $service:
-    ensure => "running",
+    ensure => 'running',
     enable => true,
   }
 

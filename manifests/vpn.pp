@@ -290,12 +290,12 @@ define l2mesh::vpn (
 
 
   @@l2mesh::host { $fqdn:
-    host => $host,
-    ip => $ip,
-    port => $port,
-    tcp_only => $tcp_only,
+    host       => $host,
+    ip         => $ip,
+    port       => $port,
+    tcp_only   => $tcp_only,
     public_key => $public_key,
-    tag_conf => $tag_conf,
+    tag_conf   => $tag_conf,
   }
   L2mesh::Host <<| fqdn != $fqdn |>> {
     conf => $conf,

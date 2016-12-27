@@ -1,4 +1,4 @@
-#
+# vim: set expandtab:
 #    Copyright (C) 2012 eNovance <licensing@enovance.com>
 #
 #    Author: Loic Dachary <loic@dachary.org>
@@ -178,7 +178,6 @@
 #
 # Copyright 2012 eNovance <licensing@enovance.com>
 #
-
 define l2mesh::vpn (
   $ip,
   $port,
@@ -222,13 +221,13 @@ define l2mesh::vpn (
     concat { $boots:
       owner => "root",
       group => "0",
-      mode	=> '0400';
+      mode  => '0400',
     }
   }
 
   concat::fragment { "${boots}_${name}":
-    target	=> $boots,
-    content	=> "${name}\n",
+    target  => $boots,
+    content => "${name}\n",
   }
 
   if ! defined(File[$root]) {
@@ -242,11 +241,11 @@ define l2mesh::vpn (
   }
 
   file { $hosts:
-    ensure      => 'directory',
-    owner       => "root",
-    group       => "root",
-    mode        => '0755',
-    require	=> File[$root],
+    ensure  => 'directory',
+    owner   => "root",
+    group   => "root",
+    mode    => '0755',
+    require => File[$root],
   }
 
   file { $private:
@@ -254,7 +253,7 @@ define l2mesh::vpn (
     group   => "root",
     mode    => '0400',
     content => $private_key,
-    notify	=> Exec[$reload],
+    notify  => Exec[$reload],
     before  => Service[$service],
   }
 
@@ -263,58 +262,60 @@ define l2mesh::vpn (
     group   => "root",
     mode    => '0444',
     content => $public_key,
-    notify	=> Exec[$reload],
+    notify  => Exec[$reload],
     before  => Service[$service],
   }
 
- 
+
   # Build tinc.conf file, adding hosts except localhost
   concat { $conf:
     owner   => "root",
     group   => "root",
     mode    => "444",
     require => File[$root],
-    notify	=> Exec[$reload],
+    notify  => Exec[$reload],
   }
 
   concat::fragment { "${conf}_head":
     target  => $conf,
     content => "Name = ${fqdn}
-AddressFamily = ipv4
-Device = /dev/net/tun
-Mode = switch
+    AddressFamily = ipv4
+    Device = /dev/net/tun
+    Mode = switch
 
-",
+    ",
   }
+
+
 
 
   @@l2mesh::host { $fqdn:
-		host => $host,
-		ip => $ip,
-		port => $port,
-		tcp_only => $tcp_only,
-		public_key => $public_key,
-		tag_conf => $tag_conf,
+    host => $host,
+    ip => $ip,
+    port => $port,
+    tcp_only => $tcp_only,
+    public_key => $public_key,
+    tag_conf => $tag_conf,
   }
   L2mesh::Host <<| fqdn != $fqdn |>> {
-		conf => $conf,
+    conf => $conf,
   }
 
- file { "/etc/init.d/$service":
+  file { "/etc/init.d/$service":
     content => template("l2mesh/initscript.erb"),
-	owner => "root",
-	group => "wheel",
-	mode => "755",
+    owner   => "root",
+    group   => "wheel",
+    mode    => "755",
   }
   service { $service:
-	ensure => "running",
-	enable => "true",
+    ensure => "running",
+    enable => "true",
   }
 
   exec { $reload:
-    command	=> "service $service reload",
-    provider	=> 'shell',
-    refreshonly	=> true,
+    command     => "service $service reload",
+    provider    => 'shell',
+    refreshonly => true,
   }
 }
 

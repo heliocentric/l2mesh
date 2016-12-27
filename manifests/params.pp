@@ -1,3 +1,4 @@
+# vim: set expandtab:
 #
 #    Copyright (C) 2012 eNovance <licensing@enovance.com>
 #

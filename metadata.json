@@ -1,33 +1,36 @@
 {
-  "name": "heliocentric-l2mesh",
-  "version": "0.1.4",
-  "author": "heliocentric",
-  "summary": "Module to implement a layer 2 mesh vpn with Tinc",
-  "license": "AGPL",
-  "source": "https://github.com/heliocentric/l2mesh",
-  "homepage_url": "https://github.com/heliocentric/l2mesh",
-  "project_page": "https://github.com/heliocentric/l2mesh",
-  "issues_url": "https://github.com/heliocentric/l2mesh/issues",
-  "operatingsystem_support": [
-    {
-      "operatingsystem": "CentOS"
-    },
-    {
-      "operatingsystem": "RedHat"
-    }
-  ],
-  "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": "2015.x"
-    },
-    {
-      "name": "puppet",
-      "version_requirement": "4.x"
-    }
-  ],
-  "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
-  ]
+	"name": "heliocentric-l2mesh",
+	"version": "0.1.5",
+	"author": "heliocentric",
+	"summary": "Module to implement a layer 2 mesh vpn with Tinc",
+	"license": "AGPL",
+	"source": "https://github.com/heliocentric/l2mesh",
+	"homepage_url": "https://github.com/heliocentric/l2mesh",
+	"project_page": "https://github.com/heliocentric/l2mesh",
+	"issues_url": "https://github.com/heliocentric/l2mesh/issues",
+	"operatingsystem_support": [
+		{
+			"operatingsystem": "CentOS"
+		},
+		{
+			"operatingsystem": "RedHat"
+		}
+	],
+	"requirements": [
+		{
+			"name": "pe",
+			"version_requirement": "2015.x"
+		},
+		{
+			"name": "puppet",
+			"version_requirement": "4.x"
+		}
+	],
+	"dependencies": [
+		{
+			"name":"puppetlabs-stdlib",
+			"version_requirement":">= 4.5.0"
+		}
+	]
 }
 

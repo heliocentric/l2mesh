@@ -1,16 +1,12 @@
-## MAC OS
 .DS_Store
-
-## TEXTMATE
 *.tmproj
 tmtags
-
-## EMACS
 *~
 \#*
 .\#*
-
-## VIM
 *.swp
 tags
-pkg/
+pkg/*
+vendor/*
+.bundle/*
+Gemfile.lock

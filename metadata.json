@@ -3,7 +3,7 @@
 	"version": "0.1.8",
 	"author": "heliocentric",
 	"summary": "Module to implement a layer 2 mesh vpn with Tinc",
-	"license": "AGPL",
+	"license": "AGPL-1.0",
 	"source": "https://github.com/heliocentric/l2mesh",
 	"homepage_url": "https://github.com/heliocentric/l2mesh",
 	"project_page": "https://github.com/heliocentric/l2mesh",

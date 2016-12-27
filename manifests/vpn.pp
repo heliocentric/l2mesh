@@ -271,7 +271,7 @@ define l2mesh::vpn (
   concat { $conf:
     owner   => "root",
     group   => "root",
-    mode    => "444",
+    mode    => "0444",
     require => File[$root],
     notify  => Exec[$reload],
   }
@@ -301,11 +301,11 @@ define l2mesh::vpn (
     conf => $conf,
   }
 
-  file { "/etc/init.d/$service":
+  file { "/etc/init.d/${service}":
     content => template("l2mesh/initscript.erb"),
     owner   => "root",
     group   => "wheel",
-    mode    => "755",
+    mode    => "0755",
   }
   service { $service:
     ensure => "running",
@@ -313,7 +313,7 @@ define l2mesh::vpn (
   }
 
   exec { $reload:
-    command     => "service $service reload",
+    command     => "service ${service} reload",
     provider    => 'shell',
     refreshonly => true,
   }

@@ -309,7 +309,7 @@ define l2mesh::vpn (
   }
   service { $service:
     ensure => "running",
-    enable => "true",
+    enable => true,
   }
 
   exec { $reload:

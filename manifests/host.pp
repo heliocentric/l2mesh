@@ -1,12 +1,12 @@
 # vim: set expandtab:
 define l2mesh::host(
-  $fqdn = $name,
   $host,
   $ip,
   $port,
   $tcp_only,
   $public_key,
   $tag_conf,
+  $fqdn = $name,
   $conf = undef,
 ) {
 

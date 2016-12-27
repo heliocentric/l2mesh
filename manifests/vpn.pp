@@ -312,7 +312,7 @@ Mode = switch
   }
 
   exec { $reload:
-    command	=> "service tinc-underlay reload",
+    command	=> "service $service reload",
     provider	=> 'shell',
     refreshonly	=> true,
   }

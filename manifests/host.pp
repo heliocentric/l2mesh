@@ -19,12 +19,12 @@ define l2mesh::host(
     before  => Service[$service],
     tag     => $tag,
     content => "Address = ${ip}
-    Port = ${port}
-    Compression = 0
-    TCPOnly = ${tcp_only}
+Port = ${port}
+Compression = 0
+TCPOnly = ${tcp_only}
 
-    ${public_key}
-    ",
+${public_key}
+",
 
   }
   concat::fragment { "${tag_conf}_${fqdn}":

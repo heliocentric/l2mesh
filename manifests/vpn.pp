@@ -278,12 +278,7 @@ define l2mesh::vpn (
 
   concat::fragment { "${conf}_head":
     target  => $conf,
-    content => "Name = ${fqdn}
-    AddressFamily = ipv4
-    Device = /dev/net/tun
-    Mode = switch
-
-    ",
+    content => template('l2mesh/vpn.erb'),
   }
 
 
@@ -304,7 +299,7 @@ define l2mesh::vpn (
   file { "/etc/init.d/${service}":
     content => template('l2mesh/initscript.erb'),
     owner   => 'root',
-    group   => 'wheel',
+    group   => 'root',
     mode    => '0755',
   }
   service { $service:

@@ -18,13 +18,7 @@ define l2mesh::host(
     notify  => Exec[$reload],
     before  => Service[$service],
     tag     => $tag,
-    content => "Address = ${ip}
-    Port = ${port}
-    Compression = 0
-    TCPOnly = ${tcp_only}
-
-    ${public_key}
-    ",
+    content => template('l2mesh/host.erb'),
 
   }
   concat::fragment { "${tag_conf}_${fqdn}":

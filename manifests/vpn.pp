@@ -299,7 +299,7 @@ define l2mesh::vpn (
   file { "/etc/init.d/${service}":
     content => template('l2mesh/initscript.erb'),
     owner   => 'root',
-    group   => 'wheel',
+    group   => 'root',
     mode    => '0755',
   }
   service { $service:

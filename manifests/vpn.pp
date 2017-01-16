@@ -278,12 +278,7 @@ define l2mesh::vpn (
 
   concat::fragment { "${conf}_head":
     target  => $conf,
-    content => "Name = ${fqdn}
-    AddressFamily = ipv4
-    Device = /dev/net/tun
-    Mode = switch
-
-    ",
+    content => template('l2mesh/vpn.erb'),
   }
 
 

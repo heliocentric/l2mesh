@@ -1,6 +1,6 @@
 {
 	"name": "heliocentric-l2mesh",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"author": "heliocentric",
 	"summary": "Module to implement a layer 2 mesh vpn with Tinc",
 	"license": "AGPL-1.0",

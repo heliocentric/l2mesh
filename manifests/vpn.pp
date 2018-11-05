@@ -154,10 +154,6 @@
 #
 # * Format and publish this documentation
 #
-# * What if a node is not reachable from the internet ? All other nodes
-#   will have a ConnectTO trying to reach it and this is a waste of
-#   resources although it does not break the mesh.
-#
 # * Add a test that checks if instantiating two lmesh does not run into
 #   a conflict ( l2mehs(ip = 1) + l2mesh(ip = 2) ). How is it done with
 #   rspec puppet ?
@@ -179,8 +175,8 @@
 # Copyright 2012 eNovance <licensing@enovance.com>
 #
 define l2mesh::vpn (
-  $ip,
-  $port,
+  $ip = undef,
+  $port = undef,
   $tcp_only = 'no',
 ) {
 

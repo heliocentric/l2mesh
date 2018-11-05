@@ -1,5 +1,9 @@
+<% unless @ip.nil? -%>
 Address = <%= @ip %>
+<% unless @port.nil? -%>
 Port = <%= @port %>
+<% end -%>
+<% end -%>
 Compression = 0
 TCPOnly = <%= @tcp_only %>
 

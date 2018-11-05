@@ -1,11 +1,11 @@
 # vim: set expandtab:
 define l2mesh::host(
   $host,
-  $ip,
-  $port,
   $tcp_only,
   $public_key,
   $tag_conf,
+  $ip = undef,
+  $port = undef,
   $fqdn = $name,
   $conf = undef,
 ) {
@@ -21,9 +21,11 @@ define l2mesh::host(
     content => template('l2mesh/host.erb'),
 
   }
-  concat::fragment { "${tag_conf}_${fqdn}":
-    target  => $conf,
-    tag     => "${tag_conf}_${fqdn}",
-    content => "ConnectTO = ${fqdn}\n",
+  if $ip {
+    concat::fragment { "${tag_conf}_${fqdn}":
+      target  => $conf,
+      tag     => "${tag_conf}_${fqdn}",
+      content => "ConnectTO = ${fqdn}\n",
+    }
   }
 }
